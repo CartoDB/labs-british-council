@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name=viewport content="width=device-width initial-scale=1">
+        <title>British Council</title>
+        <link rel="stylesheet" href="dist/themes/css/deep-insights.css" />
+        <link rel="stylesheet" href="bc/bc.css" />
+        <link href="//cartodb-libs.global.ssl.fastly.net/cartodbui/assets/3.23.24/favicons/favicon.ico?1443603334" rel="shortcut icon" type="image/vnd.microsoft.icon" />
+        <script src="bc/bc_vis.js"></script>
+        <script src="dist/deep-insights.uncompressed.js"></script>
+        <script src="bc/bc.js"></script>
+        <script src="dist/jquery.min.js"></script>
+    </head>
+    <body>
+        <div  id="cartoselector" class="Layer_selector">
+            <p class="layer-selector-info">Show geographic boundaries</p>
+            <ul class="layer-selector-list">
+                <li data="0" class="layer-selector-item is-active ads">
+                    <a data-layer="regions" href="#">
+                        <svg width="10px" height="8px" viewBox="0 0 10 8" version="1.1">
+                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+                                <g class="tick" sketch:type="MSArtboardGroup" transform="translate(-279.000000, -196.000000)" fill="#9B9B9B">
+                                    <g sketch:type="MSLayerGroup" transform="translate(267.000000, 110.000000)">
+                                        <g transform="translate(4.000000, 80.000000)" sketch:type="MSShapeGroup">
+                                            <path d="M8.11621906,10.9171001 C7.96093673,10.7478742 7.9613534,10.4707122 8.11691353,10.3017882 L9.11666509,9.21502901 C9.27222521,9.04580314 9.5269549,9.04580314 9.68265392,9.21472709 L11.3063127,10.9755215 C11.4620117,11.1444455 11.7164636,11.1441436 11.8718848,10.9749177 L16.3214599,6.12744938 C16.4768811,5.95822351 16.7316108,5.95731775 16.8877265,6.12593978 L17.8824779,7.19941452 C18.0385936,7.36803655 18.039288,7.64429288 17.8838668,7.81366972 L12.488014,13.6921931 C12.3325928,13.861419 12.0255004,14 11.805494,14 L11.3393692,14 C11.1193627,14 10.8125482,13.861117 10.6572659,13.6918912 L8.11621906,10.9171001" id="Rectangle-780-Copy"></path>
+                                        </g>
+                                    </g>
+                                </g>
+                            </g>
+                        </svg>
+                        UK adm. regions
+                    </a>
+                </li>
+                <li data="1" class="layer-selector-item is-active">
+                    <a data-layer="constituencies" href="#">
+                        <svg width="10px" height="8px" viewBox="0 0 10 8" version="1.1">
+                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+                                <g class="tick" sketch:type="MSArtboardGroup" transform="translate(-279.000000, -196.000000)" fill="#9B9B9B">
+                                    <g sketch:type="MSLayerGroup" transform="translate(267.000000, 110.000000)">
+                                        <g transform="translate(4.000000, 80.000000)" sketch:type="MSShapeGroup">
+                                            <path d="M8.11621906,10.9171001 C7.96093673,10.7478742 7.9613534,10.4707122 8.11691353,10.3017882 L9.11666509,9.21502901 C9.27222521,9.04580314 9.5269549,9.04580314 9.68265392,9.21472709 L11.3063127,10.9755215 C11.4620117,11.1444455 11.7164636,11.1441436 11.8718848,10.9749177 L16.3214599,6.12744938 C16.4768811,5.95822351 16.7316108,5.95731775 16.8877265,6.12593978 L17.8824779,7.19941452 C18.0385936,7.36803655 18.039288,7.64429288 17.8838668,7.81366972 L12.488014,13.6921931 C12.3325928,13.861419 12.0255004,14 11.805494,14 L11.3393692,14 C11.1193627,14 10.8125482,13.861117 10.6572659,13.6918912 L8.11621906,10.9171001" id="Rectangle-780-Copy"></path>
+                                        </g>
+                                    </g>
+                                </g>
+                            </g>
+                        </svg>
+                        UK constituencies
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div id="dashboard"></div>
+    </body>
+</html>
