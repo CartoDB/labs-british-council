@@ -283,6 +283,22 @@ input[type=range]:focus::-ms-fill-upper {
   padding: 7px 0 7px 6px;
 }
 
+/* Region locators */
+
+.region-locator {
+    font-size: 12px;
+    font-family: 'Open Sans';
+    width: 200px;
+    position: absolute;
+    top: 175px;
+    left: 100px;
+    z-index: 2;
+}
+
+.region-locator select {
+    width: 200px;
+}
+
 /* Layer selector */
 
 .Layer_selector {

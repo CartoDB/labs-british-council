@@ -6,18 +6,20 @@
         <title>British Council</title>
         <link rel="stylesheet" href="dist/themes/css/deep-insights.css" />
         <link rel="stylesheet" href="bc/bc.css" />
+        <link rel="stylesheet" href="dist/select2.min.css" />
         <link href="//cartodb-libs.global.ssl.fastly.net/cartodbui/assets/3.23.24/favicons/favicon.ico?1443603334" rel="shortcut icon" type="image/vnd.microsoft.icon" />
         <script src="bc/bc_vis.js"></script>
         <script src="dist/deep-insights.uncompressed.js"></script>
         <script src="bc/bc.js"></script>
         <script src="dist/jquery.min.js"></script>
+        <script src="dist/select2.min.js"></script>
     </head>
     <body>
-        <div  id="cartoselector" class="Layer_selector">
+        <div id="cartoselector" class="Layer_selector">
             <p class="layer-selector-info">Show geographic boundaries</p>
             <ul class="layer-selector-list">
                 <li data="0" class="layer-selector-item is-active ads">
-                    <a data-layer="regions" href="#">
+                    <a data-layer="uk_administrative_regions" href="#">
                         <svg width="10px" height="8px" viewBox="0 0 10 8" version="1.1">
                             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
                                 <g class="tick" sketch:type="MSArtboardGroup" transform="translate(-279.000000, -196.000000)" fill="#9B9B9B">
@@ -33,7 +35,7 @@
                     </a>
                 </li>
                 <li data="1" class="layer-selector-item is-active">
-                    <a data-layer="constituencies" href="#">
+                    <a data-layer="westminster_constituencies" href="#">
                         <svg width="10px" height="8px" viewBox="0 0 10 8" version="1.1">
                             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
                                 <g class="tick" sketch:type="MSArtboardGroup" transform="translate(-279.000000, -196.000000)" fill="#9B9B9B">
@@ -49,6 +51,22 @@
                     </a>
                 </li>
             </ul>
+        </div>
+        <div class="region-locator">
+            <form class="region-locator-uk-administrative-regions">
+                <fieldset>
+                    <select>
+                        <option>Search for UK adm. region</option>
+                    </select>
+                </fieldset>
+            </form>
+            <form class="region-locator-westminster-constituencies">
+                <fieldset>
+                    <select>
+                        <option>Search for constituencies</option>
+                    </select>
+                </fieldset>
+            </form>
         </div>
         <div id="dashboard"></div>
     </body>

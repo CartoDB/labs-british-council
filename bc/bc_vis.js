@@ -184,7 +184,28 @@ window.bc.viz = {
                             "id": "54c4e03d-88af-4b7b-a475-1d49d99839d8",
                             "infowindow": {
                                 "alternative_names": {},
-                                "fields": [],
+                                "fields": [
+                                    {
+                                        "name": "partner_name",
+                                        "position": 0,
+                                        "title": true
+                                    },
+                                    {
+                                        "name": "partner_postal_code",
+                                        "position": 6,
+                                        "title": true
+                                    },
+                                    {
+                                        "name": "partner_type",
+                                        "position": 7,
+                                        "title": true
+                                    },
+                                    {
+                                        "name": "partner_uk_region",
+                                        "position": 8,
+                                        "title": true
+                                    }
+                                ],
                                 "maxHeight": 180,
                                 "template": "<div class=\"CDB-infowindow CDB-infowindow--light js-infowindow\">\n  <div class=\"CDB-infowindow-container\">\n    <div class=\"CDB-infowindow-bg\">\n      <div class=\"CDB-infowindow-inner\">\n        <ul class=\"CDB-infowindow-list js-content\">\n          {{#loading}}\n            <div class=\"CDB-Loader js-loader is-visible\"></div>\n          {{/loading}}\n          {{#content.fields}}\n          <li class=\"CDB-infowindow-listItem\">\n            {{#title}}<h5 class=\"CDB-infowindow-subtitle\">{{title}}</h5>{{/title}}\n            {{#value}}<h4 class=\"CDB-infowindow-title\">{{{ value }}}</h4>{{/value}}\n            {{^value}}<h4 class=\"CDB-infowindow-title\">null</h4>{{/value}}\n          </li>\n          {{/content.fields}}\n        </ul>\n      </div>\n    </div>\n    <div class=\"CDB-hook\">\n      <div class=\"CDB-hook-inner\"></div>\n    </div>\n  </div>\n</div>\n",
                                 "template_name": "table/views/infowindow_light",
