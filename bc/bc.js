@@ -19,8 +19,8 @@
     window.onload = function () {
         var bc = window.bc;
 
-        // Change layer queries so that both layers are affected by all widgets, not only their own
-        var updateLayers = function () {
+        // Find new layer queries so that both layers are affected by all widgets, not only their own
+        var updateLayerQueries = function () {
             var sbus = bc.widgets["sbus"]._acceptedCategories().pluck("name");
             var partner_types = bc.widgets["partner_types"]._acceptedCategories().pluck("name");
             var countries = bc.widgets["countries"]._acceptedCategories().pluck("name");
@@ -48,10 +48,20 @@
                 }
                 where_clause += " audience_country_code in ('" + countries.join("','") + "')";
             }
-            console.log("setting sql", partner_query + where_clause);
+
+            return {
+                activity_query: activity_query + where_clause,
+                partner_query: partner_query + where_clause,
+                where_clause: where_clause
+            }
+        }
+
+        // Change layer queries so that both layers are affected by all widgets, not only their own
+        var updateLayers = function () {
+            var queries = updateLayerQueries();
             setTimeout(function () {
-                bc.layers['activities'].set('sql', activity_query + where_clause);
-                bc.layers['partners'].set('sql', partner_query + where_clause);
+                bc.layers['activities'].set('sql', queries['activity_query']);
+                bc.layers['partners'].set('sql', queries['partner_query']);
             }, 500); //TODO: find out if there is a more elegant way to do this
         };
 
@@ -76,10 +86,12 @@
             bc.sql.execute("with center as (select st_centroid(the_geom) as the_geom from " + table + " where cartodb_id = " + cartodb_id + ") select st_x(the_geom) as lon, st_y(the_geom) as lat from center")
                 .done(function (data) {
                     var lonlat = data.rows[0];
+                    var queries = updateLayerQueries();
+
                     bc.map.map.setView(lonlat, bc.map.map.getZoom());
-                    bc.sql.execute("select count(*) from activities, " + table + " where " + table + ".cartodb_id = " + cartodb_id + " and st_intersects(activities.the_geom, " + table + ".the_geom)")
+                    bc.sql.execute("select count(*) from activities, " + table + " " + (queries['where_clause'] ? queries['where_clause'] + " and " : "where ") + table + ".cartodb_id = " + cartodb_id + " and st_intersects(activities.the_geom, " + table + ".the_geom)")
                         .done(function (activity_count) {
-                            bc.sql.execute("with partners as (select distinct on (partner_name) * from activities) select count(*) from partners, " + table + " where " + table + ".cartodb_id = " + cartodb_id + " and st_intersects(partners.the_geom, " + table + ".the_geom)")
+                            bc.sql.execute("with partners as (select distinct on (partner_name) * from activities " + queries['where_clause'] + ") select count(*) from partners, " + table + " where " + table + ".cartodb_id = " + cartodb_id + " and st_intersects(partners.the_geom, " + table + ".the_geom)")
                                 .done(function (partner_count) {
                                     alert("Number of partners: " + partner_count.rows[0].count + "\nNumber of activities: " + activity_count.rows[0].count);
                                 });
