@@ -110,7 +110,7 @@ window.bc.viz = {
                                 "alternative_names": {},
                                 "fields": [
                                     {
-                                        "name": "name",
+                                        "name": "cartodb_id",
                                         "position": 37,
                                         "title": true
                                     }

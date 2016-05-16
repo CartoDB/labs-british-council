@@ -65,7 +65,7 @@
             }, 500); //TODO: find out if there is a more elegant way to do this
         };
 
-        var showFeature = function (cartodb_id, table) {
+        var highlightFeature = function (cartodb_id, table) {
             bc.sql_geojson.execute("select the_geom from " + table + " where cartodb_id = " + cartodb_id)
                 .done(function(geojson) {
                     if (bc.polygon) {
@@ -82,23 +82,27 @@
                 });
         }
 
+        var getCounters = function (cartodb_id, table, callback) {
+            var queries = updateLayerQueries();
+
+            bc.sql.execute("select count(*) from activities, " + table + " " + (queries['where_clause'] ? queries['where_clause'] + " and " : "where ") + table + ".cartodb_id = " + cartodb_id + " and st_intersects(activities.the_geom, " + table + ".the_geom)")
+                .done(function (activity_count) {
+                    bc.sql.execute("with partners as (select distinct on (partner_name) * from activities " + queries['where_clause'] + ") select count(*) from partners, " + table + " where " + table + ".cartodb_id = " + cartodb_id + " and st_intersects(partners.the_geom, " + table + ".the_geom)")
+                        .done(function (partner_count) {
+                            callback({partner_count: partner_count.rows[0].count, activity_count: + activity_count.rows[0].count});
+                        });
+                });
+        };
+
         var centerOnFeature = function (cartodb_id, table) {
-            showFeature(cartodb_id, table);
+            highlightFeature(cartodb_id, table);
 
             bc.sql.execute("with center as (select st_centroid(the_geom) as the_geom from " + table + " where cartodb_id = " + cartodb_id + ") select st_x(the_geom) as lon, st_y(the_geom) as lat from center")
                 .done(function (data) {
                     var lonlat = data.rows[0];
-                    var queries = updateLayerQueries();
 
                     bc.native_map.setView(lonlat, bc.native_map.getZoom());
-                    bc.sql.execute("select count(*) from activities, " + table + " " + (queries['where_clause'] ? queries['where_clause'] + " and " : "where ") + table + ".cartodb_id = " + cartodb_id + " and st_intersects(activities.the_geom, " + table + ".the_geom)")
-                        .done(function (activity_count) {
-                            bc.sql.execute("with partners as (select distinct on (partner_name) * from activities " + queries['where_clause'] + ") select count(*) from partners, " + table + " where " + table + ".cartodb_id = " + cartodb_id + " and st_intersects(partners.the_geom, " + table + ".the_geom)")
-                                .done(function (partner_count) {
-                                    alert("Number of partners: " + partner_count.rows[0].count + "\nNumber of activities: " + activity_count.rows[0].count);
-                                });
-                        });
-                    bc.layers[table].trigger('featureClick', null, [lonlat.lat, lonlat.lon], null, {cartodb_id: cartodb_id}, 0);
+                    bc.layers[table].trigger('featureClick', null, [lonlat.lat, lonlat.lon], null, {cartodb_id: cartodb_id}, 0);  // TODO: doesn't work
                 });
         };
 
@@ -126,19 +130,23 @@
                 'sbus': bc.dashboard.getWidget("e2463ef2-2dee-4105-9740-f7cb118b13fd")
             }
 
-            bc.layers["westminster_constituencies"].on('featureClick', function(e, latlng, pos, data, subLayerIndex) {
-                console.log("mouse over polygon with data:", e, latlng, pos, data, subLayerIndex);
-            });
-            bc.layers["uk_administrative_regions"].on('featureClick', function(e, latlng, pos, data, subLayerIndex) {
-                console.log("mouse over polygon with data:", e, latlng, pos, data, subLayerIndex);
-            });
+            bc.layers["uk_administrative_regions"].infowindow.set({template_type: "underscore", template: $('#infowindow_template').html()});
+            bc.getRecord = function (cartodb_id) {
+                if (cartodb_id) {
+                    highlightFeature(cartodb_id, "uk_administrative_regions");
+                    getCounters(cartodb_id, "uk_administrative_regions", function (counters) {
+                        $("#partner_count").text(counters.partner_count);
+                        $("#activity_count").text(counters.activity_count);
+                    });
+                }
+            };
+
             // Layer selector
             $('.Layer_selector a').click(function (e) {
                 var layer_name = e.currentTarget.getAttribute('data-layer');
                 var is_visible = bc.layers[layer_name].get('visible');
                 bc.layers[layer_name].set('visible', !is_visible);
                 $(this).toggleClass('is_visible');
-                console.log(".region-locator-" + layer_name.replace("_", "-"));
                 $(".region-locator-" + layer_name.replace(/_/g, "-")).toggle();
             });
 
@@ -155,9 +163,7 @@
                         data: bc.uk_administrative_regions
                     });
                     bc.adm_region_select.on("select2:select", function (e) {
-                        //bc.layers["uk_administrative_regions"].on('featureClick', function (e, pos, latlng, data) {
                         centerOnFeature(e.params.data.id, "uk_administrative_regions");
-                        //});
                     });
                 });
 
