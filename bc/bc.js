@@ -65,11 +65,11 @@
             }, 500); //TODO: find out if there is a more elegant way to do this
         };
 
-        var showFeature = function (cartodb_id) {
-            bc.sql_geojson.execute("select ST_Simplify(the_geom, 0.1) as the_geom from uk_administrative_regions where cartodb_id = " + cartodb_id)
+        var showFeature = function (cartodb_id, table) {
+            bc.sql_geojson.execute("select the_geom from " + table + " where cartodb_id = " + cartodb_id)
                 .done(function(geojson) {
                     if (bc.polygon) {
-                        bc.map.removeLayer(polygon);
+                        bc.native_map.removeLayer(bc.polygon);
                     }
                     bc.polygon = L.geoJson(geojson, {
                         style: {
@@ -78,17 +78,19 @@
                             weight: 2,
                             opacity: 0.65
                         }
-                    }).addTo(bc.map.map);
+                    }).addTo(bc.native_map);
                 });
         }
 
         var centerOnFeature = function (cartodb_id, table) {
+            showFeature(cartodb_id, table);
+
             bc.sql.execute("with center as (select st_centroid(the_geom) as the_geom from " + table + " where cartodb_id = " + cartodb_id + ") select st_x(the_geom) as lon, st_y(the_geom) as lat from center")
                 .done(function (data) {
                     var lonlat = data.rows[0];
                     var queries = updateLayerQueries();
 
-                    bc.map.map.setView(lonlat, bc.map.map.getZoom());
+                    bc.native_map.setView(lonlat, bc.native_map.getZoom());
                     bc.sql.execute("select count(*) from activities, " + table + " " + (queries['where_clause'] ? queries['where_clause'] + " and " : "where ") + table + ".cartodb_id = " + cartodb_id + " and st_intersects(activities.the_geom, " + table + ".the_geom)")
                         .done(function (activity_count) {
                             bc.sql.execute("with partners as (select distinct on (partner_name) * from activities " + queries['where_clause'] + ") select count(*) from partners, " + table + " where " + table + ".cartodb_id = " + cartodb_id + " and st_intersects(partners.the_geom, " + table + ".the_geom)")
@@ -110,6 +112,7 @@
 
             bc.dashboard = dashboard;
             bc.map = bc.dashboard.getMap();
+            bc.native_map = bc.map.getNativeMap();
             bc.layers = {
                 'uk_administrative_regions': bc.map.getLayer(2),
                 'westminster_constituencies': bc.map.getLayer(1),
