@@ -111,7 +111,12 @@ window.bc.viz = {
                                 "fields": [
                                     {
                                         "name": "cartodb_id",
-                                        "position": 37,
+                                        "position": 1,
+                                        "title": true
+                                    },
+                                    {
+                                        "name": "name",
+                                        "position": 2,
                                         "title": true
                                     }
                                 ],
