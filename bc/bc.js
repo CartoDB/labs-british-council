@@ -130,13 +130,24 @@
                 'sbus': bc.dashboard.getWidget("e2463ef2-2dee-4105-9740-f7cb118b13fd")
             }
 
-            bc.layers["uk_administrative_regions"].infowindow.set({template: $('#infowindow_template').html()});
-            bc.getRecord = function (cartodb_id) {
+            bc.layers["uk_administrative_regions"].infowindow.set({template: $('#infowindow_template_uk_administrative_regions').html()});
+            bc.getInfowindowContentUKAdministrativeRegion = function (cartodb_id) {
                 if (cartodb_id) {
                     highlightFeature(cartodb_id, "uk_administrative_regions");
                     getCounters(cartodb_id, "uk_administrative_regions", function (counters) {
-                        $("#partner_count").text(counters.partner_count);
-                        $("#activity_count").text(counters.activity_count);
+                        $(".infowindow-uk-administrative-regions #partner_count").text(counters.partner_count);
+                        $(".infowindow-uk-administrative-regions #activity_count").text(counters.activity_count);
+                    });
+                }
+            };
+
+            bc.layers["westminster_constituencies"].infowindow.set({template: $('#infowindow_template_westminster_constituencies').html()});
+            bc.getInfowindowContentWestminsterConstituency = function (cartodb_id) {
+                if (cartodb_id) {
+                    highlightFeature(cartodb_id, "westminster_constituencies");
+                    getCounters(cartodb_id, "westminster_constituencies", function (counters) {
+                        $(".infowindow-westminster-constituencies #partner_count").text(counters.partner_count);
+                        $(".infowindow-westminster-constituencies #activity_count").text(counters.activity_count);
                     });
                 }
             };

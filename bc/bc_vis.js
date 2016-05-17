@@ -69,13 +69,18 @@ window.bc.viz = {
                                 "alternative_names": {},
                                 "fields": [
                                     {
+                                        "name": "cartodb_id",
+                                        "position": 1,
+                                        "title": true
+                                    },
+                                    {
                                         "name": "name",
-                                        "position": 3,
+                                        "position": 2,
                                         "title": true
                                     }
                                 ],
                                 "maxHeight": 180,
-                                "template": "<div class=\"CDB-infowindow CDB-infowindow--light js-infowindow\">\n  <div class=\"CDB-infowindow-container\">\n    <div class=\"CDB-infowindow-bg\">\n      <div class=\"CDB-infowindow-inner\">\n        <ul class=\"CDB-infowindow-list js-content\">\n          {{#loading}}\n            <div class=\"CDB-Loader js-loader is-visible\"></div>\n          {{/loading}}\n          {{#content.fields}}\n          <li class=\"CDB-infowindow-listItem\">\n            {{#title}}<h5 class=\"CDB-infowindow-subtitle\">{{title}}</h5>{{/title}}\n            {{#value}}<h4 class=\"CDB-infowindow-title\">{{{ value }}}</h4>{{/value}}\n            {{^value}}<h4 class=\"CDB-infowindow-title\">null</h4>{{/value}}\n          </li>\n          {{/content.fields}}\n        </ul>\n      </div>\n    </div>\n    <div class=\"CDB-hook\">\n      <div class=\"CDB-hook-inner\"></div>\n    </div>\n  </div>\n</div>\n",
+                                "template_type": "underscore",
                                 "template_name": "table/views/infowindow_light",
                                 "width": 226
                             },

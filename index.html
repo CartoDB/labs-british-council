@@ -15,8 +15,8 @@
         <script src="dist/select2.min.js"></script>
     </head>
     <body>
-        <script type="infowindow/html" id="infowindow_template">
-            <div class="CDB-infowindow CDB-infowindow--light js-infowindow">
+        <script type="infowindow/html" id="infowindow_template_uk_administrative_regions">
+            <div class="CDB-infowindow CDB-infowindow--light js-infowindow infowindow-uk-administrative-regions">
                 <div class="CDB-infowindow-container">
                     <div class="CDB-infowindow-bg">
                         <div class="CDB-infowindow-inner">
@@ -33,7 +33,36 @@
                                     <h5 class="CDB-infowindow-subtitle">Num. of activities</h5>
                                     <h4 class="CDB-infowindow-title" id="activity_count"></h4>
                                 </li>
-                                <%= bc.getRecord(arguments[0]["cartodb id"]) %>
+                                <%= bc.getInfowindowContentUKAdministrativeRegion(arguments[0]["cartodb id"]) %>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="CDB-hook">
+                        <div class="CDB-hook-inner"></div>
+                    </div>
+                </div>
+            </div>
+        </script>
+
+        <script type="infowindow/html" id="infowindow_template_westminster_constituencies">
+            <div class="CDB-infowindow CDB-infowindow--light js-infowindow infowindow-westminster-constituencies">
+                <div class="CDB-infowindow-container">
+                    <div class="CDB-infowindow-bg">
+                        <div class="CDB-infowindow-inner">
+                            <ul class="CDB-infowindow-list js-content">
+                                <li class="CDB-infowindow-listItem">
+                                    <h5 class="CDB-infowindow-subtitle">Constituency name</h5>
+                                    <h4 class="CDB-infowindow-title"><%= arguments[0]["name"] %></h4>
+                                </li>
+                                <li class="CDB-infowindow-listItem">
+                                    <h5 class="CDB-infowindow-subtitle">Num. of partners</h5>
+                                    <h4 class="CDB-infowindow-title" id="partner_count"></h4>
+                                </li>
+                                <li class="CDB-infowindow-listItem">
+                                    <h5 class="CDB-infowindow-subtitle">Num. of activities</h5>
+                                    <h4 class="CDB-infowindow-title" id="activity_count"></h4>
+                                </li>
+                                <%= bc.getInfowindowContentWestminsterConstituency(arguments[0]["cartodb id"]) %>
                             </ul>
                         </div>
                     </div>
