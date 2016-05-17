@@ -130,7 +130,7 @@
                 'sbus': bc.dashboard.getWidget("e2463ef2-2dee-4105-9740-f7cb118b13fd")
             }
 
-            bc.layers["uk_administrative_regions"].infowindow.set({template_type: "underscore", template: $('#infowindow_template').html()});
+            bc.layers["uk_administrative_regions"].infowindow.set({template: $('#infowindow_template').html()});
             bc.getRecord = function (cartodb_id) {
                 if (cartodb_id) {
                     highlightFeature(cartodb_id, "uk_administrative_regions");
