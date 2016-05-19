@@ -51,16 +51,32 @@
                         <div class="CDB-infowindow-inner">
                             <ul class="CDB-infowindow-list js-content">
                                 <li class="CDB-infowindow-listItem">
+                                    <h5 class="CDB-infowindow-subtitle">Region name</h5>
+                                    <h4 class="CDB-infowindow-title" id="region"></h4>
+                                </li>
+                                <li class="CDB-infowindow-listItem">
+                                    <h5 class="CDB-infowindow-subtitle">Num. of partners</h5>
+                                    <h4 class="CDB-infowindow-title" id="region_partner_count"></h4>
+                                </li>
+                                <li class="CDB-infowindow-listItem">
+                                    <h5 class="CDB-infowindow-subtitle">Num. of activities</h5>
+                                    <h4 class="CDB-infowindow-title" id="region_activity_count"></h4>
+                                </li>
+                                <li class="CDB-infowindow-listItem">
                                     <h5 class="CDB-infowindow-subtitle">Constituency name</h5>
                                     <h4 class="CDB-infowindow-title"><%= arguments[0]["name"] %></h4>
                                 </li>
                                 <li class="CDB-infowindow-listItem">
-                                    <h5 class="CDB-infowindow-subtitle">Num. of partners</h5>
-                                    <h4 class="CDB-infowindow-title" id="partner_count"></h4>
+                                    <h5 class="CDB-infowindow-subtitle">Partners</h5>
+                                    <h4 class="CDB-infowindow-title" id="partners"></h4>
                                 </li>
                                 <li class="CDB-infowindow-listItem">
-                                    <h5 class="CDB-infowindow-subtitle">Num. of activities</h5>
-                                    <h4 class="CDB-infowindow-title" id="activity_count"></h4>
+                                    <h5 class="CDB-infowindow-subtitle">Programmes</h5>
+                                    <h4 class="CDB-infowindow-title" id="activity_programmes"></h4>
+                                </li>
+                                <li class="CDB-infowindow-listItem">
+                                    <h5 class="CDB-infowindow-subtitle">Countries</h5>
+                                    <h4 class="CDB-infowindow-title" id="audience_country_codes"></h4>
                                 </li>
                                 <%= bc.getInfowindowContentWestminsterConstituency(arguments[0]["cartodb id"]) %>
                             </ul>

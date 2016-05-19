@@ -82,14 +82,49 @@
                 });
         }
 
-        var getCounters = function (cartodb_id, table, callback) {
+        var getUKAdministrativeRegionCounters = function (cartodb_id, callback) {
             var queries = updateLayerQueries();
 
-            bc.sql.execute("select count(*) from activities, " + table + " " + (queries['where_clause'] ? queries['where_clause'] + " and " : "where ") + table + ".cartodb_id = " + cartodb_id + " and st_intersects(activities.the_geom, " + table + ".the_geom)")
+            bc.sql.execute("select count(*) from activities, uk_administrative_regions " + (queries['where_clause'] ? queries['where_clause'] + " and " : "where ") + "uk_administrative_regions.cartodb_id = " + cartodb_id + " and st_intersects(activities.the_geom, uk_administrative_regions.the_geom)")
                 .done(function (activity_count) {
-                    bc.sql.execute("with partners as (select distinct on (partner_name) * from activities " + queries['where_clause'] + ") select count(*) from partners, " + table + " where " + table + ".cartodb_id = " + cartodb_id + " and st_intersects(partners.the_geom, " + table + ".the_geom)")
+                    bc.sql.execute("with partners as (select distinct on (partner_name) * from activities " + queries['where_clause'] + ") select count(*) from partners, uk_administrative_regions where uk_administrative_regions.cartodb_id = " + cartodb_id + " and st_intersects(partners.the_geom, uk_administrative_regions.the_geom)")
                         .done(function (partner_count) {
-                            callback({partner_count: partner_count.rows[0].count, activity_count: + activity_count.rows[0].count});
+                            callback({partner_count: partner_count.rows[0].count, activity_count: activity_count.rows[0].count});
+                        });
+                });
+        };
+
+        var getWestminsterConstituencyCounters = function (cartodb_id, callback) {
+            var queries = updateLayerQueries();
+
+            // TODO: intersection + area calculation is a hack until we have a real foreign key between regions and constituencies
+            bc.sql.execute("select uk_administrative_regions.cartodb_id, uk_administrative_regions.name, st_area(st_intersection(uk_administrative_regions.the_geom, westminster_constituencies.the_geom)) as area from uk_administrative_regions, westminster_constituencies where westminster_constituencies.cartodb_id = " + cartodb_id + " order by area desc limit 1")
+                .done(function (region_data) {
+                    var region = region_data.rows[0];
+
+                    bc.sql.execute("select count(*) from activities, uk_administrative_regions " + (queries['where_clause'] ? queries['where_clause'] + " and " : "where ") + "uk_administrative_regions.cartodb_id = " + region.cartodb_id + " and st_intersects(activities.the_geom, uk_administrative_regions.the_geom)")
+                        .done(function (activity_count) {
+                            bc.sql.execute("with partners as (select distinct on (partner_name) * from activities " + queries['where_clause'] + ") select count(*) from partners, uk_administrative_regions where uk_administrative_regions.cartodb_id = " + region.cartodb_id + " and st_intersects(partners.the_geom, uk_administrative_regions.the_geom)")
+                                .done(function (partner_count) {
+                                    bc.sql.execute("select distinct partner_name from activities, westminster_constituencies " + (queries['where_clause'] ? queries['where_clause'] + " and " : "where ") + "westminster_constituencies.cartodb_id = " + cartodb_id + " and st_intersects(activities.the_geom, westminster_constituencies.the_geom)")
+                                        .done(function (partners) {
+                                            bc.sql.execute("select distinct activity_programme from activities, westminster_constituencies " + (queries['where_clause'] ? queries['where_clause'] + " and " : "where ") + "westminster_constituencies.cartodb_id = " + cartodb_id + " and st_intersects(activities.the_geom, westminster_constituencies.the_geom)")
+                                                .done(function (activity_programmes) {
+                                                    bc.sql.execute("select distinct audience_country_code from activities, westminster_constituencies " + (queries['where_clause'] ? queries['where_clause'] + " and " : "where ") + "westminster_constituencies.cartodb_id = " + cartodb_id + " and st_intersects(activities.the_geom, westminster_constituencies.the_geom)")
+                                                        .done(function (audience_country_codes) {
+                                                            console.log(partner_count, activity_count, partners, activity_programmes, audience_country_codes);
+                                                            callback({
+                                                                region_name: region.name,
+                                                                region_partner_count: partner_count.rows[0].count,
+                                                                region_activity_count: activity_count.rows[0].count,
+                                                                partners: _.pluck(partners.rows, "partner_name").join(),
+                                                                activity_programmes: _.pluck(activity_programmes.rows, "activity_programme").join(),
+                                                                audience_country_codes: _.pluck(audience_country_codes.rows, "audience_country_code").join()
+                                                            });
+                                                        });
+                                                });
+                                        });
+                                });
                         });
                 });
         };
@@ -102,7 +137,7 @@
                     var lonlat = data.rows[0];
 
                     bc.native_map.setView(lonlat, bc.native_map.getZoom());
-                    bc.layers[table].trigger('featureClick', null, [lonlat.lat, lonlat.lon], null, {cartodb_id: cartodb_id}, 0);  // TODO: doesn't work
+                    bc.layer_views[table].trigger('featureClick', null, [lonlat.lat, lonlat.lon], null, {cartodb_id: cartodb_id}, 1);
                 });
         };
 
@@ -123,6 +158,10 @@
                 'activities': bc.map.getLayer(3),
                 'partners': bc.map.getLayer(4)
             };
+            bc.layer_views = {
+                'uk_administrative_regions': bc.map.getLayerViews()[2],
+                'westminster_constituencies': bc.map.getLayerViews()[1],
+            };
             bc.widgets = {
                 'partners': bc.dashboard.getWidget("c8e04c7f-cc06-43da-8e4f-d7b570218245"),
                 'partner_types': bc.dashboard.getWidget("013d6f4d-2824-4730-8aa8-fad59a079813"),
@@ -134,7 +173,7 @@
             bc.getInfowindowContentUKAdministrativeRegion = function (cartodb_id) {
                 if (cartodb_id) {
                     highlightFeature(cartodb_id, "uk_administrative_regions");
-                    getCounters(cartodb_id, "uk_administrative_regions", function (counters) {
+                    getUKAdministrativeRegionCounters(cartodb_id, function (counters) {
                         $(".infowindow-uk-administrative-regions #partner_count").text(counters.partner_count);
                         $(".infowindow-uk-administrative-regions #activity_count").text(counters.activity_count);
                     });
@@ -145,9 +184,13 @@
             bc.getInfowindowContentWestminsterConstituency = function (cartodb_id) {
                 if (cartodb_id) {
                     highlightFeature(cartodb_id, "westminster_constituencies");
-                    getCounters(cartodb_id, "westminster_constituencies", function (counters) {
-                        $(".infowindow-westminster-constituencies #partner_count").text(counters.partner_count);
-                        $(".infowindow-westminster-constituencies #activity_count").text(counters.activity_count);
+                    getWestminsterConstituencyCounters(cartodb_id, function (counters) {
+                        $(".infowindow-westminster-constituencies #region").text(counters.region_name);
+                        $(".infowindow-westminster-constituencies #region_partner_count").text(counters.region_partner_count);
+                        $(".infowindow-westminster-constituencies #region_activity_count").text(counters.region_activity_count);
+                        $(".infowindow-westminster-constituencies #partners").text(counters.partners);
+                        $(".infowindow-westminster-constituencies #activity_programmes").text(counters.activity_programmes);
+                        $(".infowindow-westminster-constituencies #audience_country_codes").text(counters.audience_country_codes);
                     });
                 }
             };
