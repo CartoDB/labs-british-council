@@ -92,7 +92,7 @@ window.bc.viz = {
                                 "visible": true
                             },
                             "options": {
-                                "cartocss": "/** simple visualization */\n\n#westminster_constituencies{\n  polygon-fill: #229A00;\n  polygon-opacity: 0.2;\n  line-color: #FFF;\n  line-width: 0.5;\n  line-opacity: 1;\n}",
+                                "cartocss": "/** simple visualization */\n\n#westminster_constituencies{\n  polygon-fill: #f7ebdd;\n  polygon-opacity: 0;\n  line-color: #FA7806;\n  line-width: 0.25;\n  line-opacity: 0.5;\n}",
                                 "cartocss_version": "2.1.1",
                                 "interactivity": "cartodb_id",
                                 "layer_name": "westminster_constituencies",
@@ -138,7 +138,7 @@ window.bc.viz = {
                                 "visible": true
                             },
                             "options": {
-                                "cartocss": "/** simple visualization */\n\n#uk_administrative_regions{\n  polygon-fill: #3E7BB6;\n  polygon-opacity: 0.2;\n  line-color: #2E5387;\n  line-width: 0.5;\n  line-opacity: 1;\n}",
+                                "cartocss": "/** simple visualization */\n\n#uk_administrative_regions{\n  ::line{\n line-color:#FA7806;\n line-width:0.5;\n}\n polygon-fill: #f7ebdd;\n  polygon-opacity: 0.6;\n  line-color: #D55923;\n image-filters: agg-stack-blur(2,2);\n  line-width: 0.5;\n  line-opacity: 0.8;\n}",
                                 "cartocss_version": "2.1.1",
                                 "interactivity": "cartodb_id",
                                 "layer_name": "uk_administrative_regions",
@@ -166,7 +166,7 @@ window.bc.viz = {
                                 "visible": true
                             },
                             "options": {
-                                "cartocss": "/** simple visualization */\n\n#programmes_full{\n  marker-fill-opacity: 0;\n  marker-line-color: #FFF;\n  marker-line-width: 0;\n  marker-line-opacity: 0;\n  marker-placement: point;\n  marker-type: ellipse;\n  marker-width: 0;\n  marker-fill: #FF6600;\n  marker-allow-overlap: true;\n}",
+                                "cartocss": "/** simple visualization */\n\n#programmes_full{\n  marker-fill-opacity: 0;\n  marker-line-color: #FFF;\n  marker-line-width: 0;\n  marker-line-opacity: 0;\n  marker-placement: point;\n  marker-type: ellipse;\n  marker-width: 0;\n  marker-fill: #4CD6B5;\n  marker-allow-overlap: true;\n}",
                                 "cartocss_version": "2.1.1",
                                 "interactivity": "cartodb_id",
                                 "layer_name": "programmes_full",
@@ -223,7 +223,7 @@ window.bc.viz = {
                                 "visible": true
                             },
                             "options": {
-                                "cartocss": "/** simple visualization */\n\n#partners{\n  marker-fill-opacity: 0.9;\n  marker-line-color: #FFF;\n  marker-line-width: 1;\n  marker-line-opacity: 1;\n  marker-placement: point;\n  marker-type: ellipse;\n  marker-width: 10;\n  marker-fill: #FF6600;\n  marker-allow-overlap: true;\n}",
+                                "cartocss": "/** simple visualization */\n\n#partners{\n  marker-fill-opacity: 0.8;\n  marker-line-color:#377787;\n  marker-line-width: 1;\n  marker-line-opacity: 1;\n  marker-placement: point;\n  marker-type: ellipse;\n  marker-width: 7;\n  marker-fill:#4CD6B5;\n  marker-allow-overlap: true;\n [zoom<=8]{marker-width:5;\n marker-line-width:0.5;\n}\n}",
                                 "cartocss_version": "2.1.1",
                                 "interactivity": "cartodb_id",
                                 "layer_name": "partners",
