@@ -4,13 +4,13 @@
     window.bc = window.bc || {};
 
     window.bc.sql = new cartodb.SQL({
-        user: 'dcarrion',
+        user: 'kevinsmith',
         protocol: "https",
         sql_api_template: "https://{user}.cartodb.com:443"
     });
 
     window.bc.sql_geojson = new cartodb.SQL({
-        user: 'dcarrion',
+        user: 'kevinsmith',
         protocol: "https",
         sql_api_template: "https://{user}.cartodb.com:443",
         format: "geojson"
@@ -25,8 +25,8 @@
             var partner_types = bc.widgets["partner_types"]._acceptedCategories().pluck("name");
             var countries = bc.widgets["countries"]._acceptedCategories().pluck("name");
 
-            var activity_query = 'select * from activities';
-            var partner_query = 'select distinct on (partner_name) * from activities';
+            var activity_query = 'select * from programmes_full';
+            var partner_query = 'select distinct on (partner) * from programmes_full';
             var where_clause = '';
 
             if (sbus.length > 0) {
@@ -46,7 +46,7 @@
                 } else {
                     where_clause += " where ";
                 }
-                where_clause += " audience_country_code in ('" + countries.join("','") + "')";
+                where_clause += " code in ('" + countries.join("','") + "')";
             }
 
             return {
@@ -60,7 +60,7 @@
         var updateLayers = function () {
             var queries = updateLayerQueries();
             setTimeout(function () {
-                bc.layers['activities'].set('sql', queries['activity_query']);
+                bc.layers['programmes'].set('sql', queries['activity_query']);
                 bc.layers['partners'].set('sql', queries['partner_query']);
             }, 500); //TODO: find out if there is a more elegant way to do this
         };
@@ -85,9 +85,9 @@
         var getUKAdministrativeRegionCounters = function (cartodb_id, callback) {
             var queries = updateLayerQueries();
 
-            bc.sql.execute("select count(*) from activities, uk_administrative_regions " + (queries['where_clause'] ? queries['where_clause'] + " and " : "where ") + "uk_administrative_regions.cartodb_id = " + cartodb_id + " and st_intersects(activities.the_geom, uk_administrative_regions.the_geom)")
+            bc.sql.execute("select count(*) from programmes_full, uk_administrative_regions " + (queries['where_clause'] ? queries['where_clause'] + " and " : "where ") + "uk_administrative_regions.cartodb_id = " + cartodb_id + " and st_intersects(programmes_full.the_geom, uk_administrative_regions.the_geom)")
                 .done(function (activity_count) {
-                    bc.sql.execute("with partners as (select distinct on (partner_name) * from activities " + queries['where_clause'] + ") select count(*) from partners, uk_administrative_regions where uk_administrative_regions.cartodb_id = " + cartodb_id + " and st_intersects(partners.the_geom, uk_administrative_regions.the_geom)")
+                    bc.sql.execute("with partners as (select distinct on (partner) * from programmes_full " + queries['where_clause'] + ") select count(*) from partners, uk_administrative_regions where uk_administrative_regions.cartodb_id = " + cartodb_id + " and st_intersects(partners.the_geom, uk_administrative_regions.the_geom)")
                         .done(function (partner_count) {
                             callback({partner_count: partner_count.rows[0].count, activity_count: activity_count.rows[0].count});
                         });
@@ -102,24 +102,23 @@
                 .done(function (region_data) {
                     var region = region_data.rows[0];
 
-                    bc.sql.execute("select count(*) from activities, uk_administrative_regions " + (queries['where_clause'] ? queries['where_clause'] + " and " : "where ") + "uk_administrative_regions.cartodb_id = " + region.cartodb_id + " and st_intersects(activities.the_geom, uk_administrative_regions.the_geom)")
+                    bc.sql.execute("select count(*) from programmes_full, uk_administrative_regions " + (queries['where_clause'] ? queries['where_clause'] + " and " : "where ") + "uk_administrative_regions.cartodb_id = " + region.cartodb_id + " and st_intersects(programmes_full.the_geom, uk_administrative_regions.the_geom)")
                         .done(function (activity_count) {
-                            bc.sql.execute("with partners as (select distinct on (partner_name) * from activities " + queries['where_clause'] + ") select count(*) from partners, uk_administrative_regions where uk_administrative_regions.cartodb_id = " + region.cartodb_id + " and st_intersects(partners.the_geom, uk_administrative_regions.the_geom)")
+                            bc.sql.execute("with partners as (select distinct on (partner) * from programmes_full " + queries['where_clause'] + ") select count(*) from partners, uk_administrative_regions where uk_administrative_regions.cartodb_id = " + region.cartodb_id + " and st_intersects(partners.the_geom, uk_administrative_regions.the_geom)")
                                 .done(function (partner_count) {
-                                    bc.sql.execute("select distinct partner_name from activities, westminster_constituencies " + (queries['where_clause'] ? queries['where_clause'] + " and " : "where ") + "westminster_constituencies.cartodb_id = " + cartodb_id + " and st_intersects(activities.the_geom, westminster_constituencies.the_geom)")
+                                    bc.sql.execute("select distinct partner from programmes_full, westminster_constituencies " + (queries['where_clause'] ? queries['where_clause'] + " and " : "where ") + "westminster_constituencies.cartodb_id = " + cartodb_id + " and st_intersects(programmes_full.the_geom, westminster_constituencies.the_geom)")
                                         .done(function (partners) {
-                                            bc.sql.execute("select distinct activity_programme from activities, westminster_constituencies " + (queries['where_clause'] ? queries['where_clause'] + " and " : "where ") + "westminster_constituencies.cartodb_id = " + cartodb_id + " and st_intersects(activities.the_geom, westminster_constituencies.the_geom)")
-                                                .done(function (activity_programmes) {
-                                                    bc.sql.execute("select distinct audience_country_code from activities, westminster_constituencies " + (queries['where_clause'] ? queries['where_clause'] + " and " : "where ") + "westminster_constituencies.cartodb_id = " + cartodb_id + " and st_intersects(activities.the_geom, westminster_constituencies.the_geom)")
-                                                        .done(function (audience_country_codes) {
-                                                            console.log(partner_count, activity_count, partners, activity_programmes, audience_country_codes);
+                                            bc.sql.execute("select distinct programme from programmes_full, westminster_constituencies " + (queries['where_clause'] ? queries['where_clause'] + " and " : "where ") + "westminster_constituencies.cartodb_id = " + cartodb_id + " and st_intersects(programmes_full.the_geom, westminster_constituencies.the_geom)")
+                                                .done(function (programmes) {
+                                                    bc.sql.execute("select distinct country from programmes_full, westminster_constituencies " + (queries['where_clause'] ? queries['where_clause'] + " and " : "where ") + "westminster_constituencies.cartodb_id = " + cartodb_id + " and st_intersects(programmes_full.the_geom, westminster_constituencies.the_geom)")
+                                                        .done(function (countries) {
                                                             callback({
                                                                 region_name: region.name,
                                                                 region_partner_count: partner_count.rows[0].count,
                                                                 region_activity_count: activity_count.rows[0].count,
-                                                                partners: _.pluck(partners.rows, "partner_name").join(),
-                                                                activity_programmes: _.pluck(activity_programmes.rows, "activity_programme").join(),
-                                                                audience_country_codes: _.pluck(audience_country_codes.rows, "audience_country_code").join()
+                                                                partners: _.pluck(partners.rows, "partner").join(),
+                                                                programmes: _.pluck(programmes.rows, "programme").join(),
+                                                                countries: _.pluck(countries.rows, "country").join()
                                                             });
                                                         });
                                                 });
@@ -155,7 +154,7 @@
             bc.layers = {
                 'uk_administrative_regions': bc.map.getLayer(2),
                 'westminster_constituencies': bc.map.getLayer(1),
-                'activities': bc.map.getLayer(3),
+                'programmes': bc.map.getLayer(3),
                 'partners': bc.map.getLayer(4)
             };
             bc.layer_views = {
@@ -189,8 +188,8 @@
                         $(".infowindow-westminster-constituencies #region_partner_count").text(counters.region_partner_count);
                         $(".infowindow-westminster-constituencies #region_activity_count").text(counters.region_activity_count);
                         $(".infowindow-westminster-constituencies #partners").text(counters.partners);
-                        $(".infowindow-westminster-constituencies #activity_programmes").text(counters.activity_programmes);
-                        $(".infowindow-westminster-constituencies #audience_country_codes").text(counters.audience_country_codes);
+                        $(".infowindow-westminster-constituencies #programmes").text(counters.programmes);
+                        $(".infowindow-westminster-constituencies #countries").text(counters.countries);
                     });
                 }
             };
@@ -204,7 +203,7 @@
                 $(".region-locator-" + layer_name.replace(/_/g, "-")).toggle();
             });
 
-            // Filter activities by all widgets, including those related to the partner layer
+            // Filter programmes_full by all widgets, including those related to the partner layer
             bc.widgets['sbus']._acceptedCategories().on('add remove reset', updateLayers);
             bc.widgets['partner_types']._acceptedCategories().on('add remove reset', updateLayers);
             bc.widgets['countries']._acceptedCategories().on('add remove reset', updateLayers);

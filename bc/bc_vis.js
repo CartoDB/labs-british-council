@@ -5,10 +5,10 @@ window.bc.viz = {
         {
             "id": "a0",
             "options": {
-                "table_name": "activities"
+                "table_name": "programmes_full"
             },
             "params": {
-                "query": "SELECT * FROM activities"
+                "query": "SELECT * FROM programmes_full"
             },
             "type": "source"
         }
@@ -27,7 +27,7 @@ window.bc.viz = {
     "datasource": {
         "maps_api_template": "https://{user}.cartodb.com:443",
         "stat_tag": "1a6ec0f4-16dc-11e6-a2c1-0e3ff518bd15",
-        "user_name": "dcarrion"
+        "user_name": "kevinsmith"
     },
     "description": null,
     "id": "1a6ec0f4-16dc-11e6-a2c1-0e3ff518bd15",
@@ -166,10 +166,10 @@ window.bc.viz = {
                                 "visible": true
                             },
                             "options": {
-                                "cartocss": "/** simple visualization */\n\n#activities{\n  marker-fill-opacity: 0;\n  marker-line-color: #FFF;\n  marker-line-width: 0;\n  marker-line-opacity: 0;\n  marker-placement: point;\n  marker-type: ellipse;\n  marker-width: 0;\n  marker-fill: #FF6600;\n  marker-allow-overlap: true;\n}",
+                                "cartocss": "/** simple visualization */\n\n#programmes_full{\n  marker-fill-opacity: 0;\n  marker-line-color: #FFF;\n  marker-line-width: 0;\n  marker-line-opacity: 0;\n  marker-placement: point;\n  marker-type: ellipse;\n  marker-width: 0;\n  marker-fill: #FF6600;\n  marker-allow-overlap: true;\n}",
                                 "cartocss_version": "2.1.1",
                                 "interactivity": "cartodb_id",
-                                "layer_name": "activities",
+                                "layer_name": "programmes_full",
                                 "source": "a0"
                             },
                             "order": 3,
@@ -189,12 +189,12 @@ window.bc.viz = {
                                 "alternative_names": {},
                                 "fields": [
                                     {
-                                        "name": "partner_name",
+                                        "name": "partner",
                                         "position": 0,
                                         "title": true
                                     },
                                     {
-                                        "name": "partner_postal_code",
+                                        "name": "post_code",
                                         "position": 6,
                                         "title": true
                                     },
@@ -204,7 +204,7 @@ window.bc.viz = {
                                         "title": true
                                     },
                                     {
-                                        "name": "partner_uk_region",
+                                        "name": "governmentregion",
                                         "position": 8,
                                         "title": true
                                     }
@@ -227,7 +227,7 @@ window.bc.viz = {
                                 "cartocss_version": "2.1.1",
                                 "interactivity": "cartodb_id",
                                 "layer_name": "partners",
-                                "sql": "select distinct on (partner_name) * from activities"
+                                "sql": "select distinct on (partner) * from programmes_full"
                             },
                             "order": 4,
                             "tooltip": {
@@ -246,7 +246,7 @@ window.bc.viz = {
                 },
                 "maps_api_template": "https://{user}.cartodb.com:443",
                 "sql_api_template": "https://{user}.cartodb.com:443",
-                "user_name": "dcarrion"
+                "user_name": "kevinsmith"
             },
             "type": "layergroup"
         },
@@ -338,7 +338,7 @@ window.bc.viz = {
     "updated_at": "2016-05-12T08:13:29+00:00",
     "user": {
         "avatar_url": "//gravatar.com/avatar/61ef76b031d0b335889a705ddd1b8d59?s=128",
-        "fullname": "dcarrion"
+        "fullname": "British Council"
     },
     "vector": false,
     "version": "3.0.0",
@@ -367,8 +367,8 @@ window.bc.viz = {
             "layer_id": "7bd65c25-1227-410e-8b41-7d397b1479b1",
             "options": {
                 "aggregation": "count",
-                "aggregation_column": "audience_country_code",
-                "column": "audience_country_code",
+                "aggregation_column": "country",
+                "column": "country",
                 "sync_on_bbox_change": true,
                 "sync_on_data_change": true
             },
@@ -384,8 +384,8 @@ window.bc.viz = {
             "layer_id": "7bd65c25-1227-410e-8b41-7d397b1479b1",
             "options": {
                 "aggregation": "count",
-                "aggregation_column": "activity_sbu",
-                "column": "activity_sbu",
+                "aggregation_column": "sbu",
+                "column": "sbu",
                 "sync_on_bbox_change": true,
                 "sync_on_data_change": true
             },
