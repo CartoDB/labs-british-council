@@ -24,6 +24,7 @@
             var sbus = bc.widgets["sbus"]._acceptedCategories().pluck("name");
             var partner_types = bc.widgets["partner_types"]._acceptedCategories().pluck("name");
             var countries = bc.widgets["countries"]._acceptedCategories().pluck("name");
+            var engagement = bc.widgets['engagement'][0].value;
 
             var programme_query = 'select * from programmes_full';
             var partner_query = 'select distinct on (partner) * from programmes_full';
@@ -47,6 +48,14 @@
                     where_clause += " where ";
                 }
                 where_clause += " country in ('" + countries.join("','") + "')";
+            }
+            if (engagement > 1) {
+                if (sbus.length > 0 || partner_types.length > 0 || countries.length > 0) {
+                    where_clause += " and ";
+                } else {
+                    where_clause += " where ";
+                }
+                where_clause += " engagement > " + engagement;
             }
 
             return {
@@ -211,6 +220,15 @@
             bc.widgets['sbus']._acceptedCategories().on('add remove reset', updateLayers);
             bc.widgets['partner_types']._acceptedCategories().on('add remove reset', updateLayers);
             bc.widgets['countries']._acceptedCategories().on('add remove reset', updateLayers);
+            bc.sql.execute("select engagement from programmes_full order by engagement desc limit 1")
+                .done(function (data) {
+                    $('<div class="CDB-Widget CDB-Widget--light"><div class="CDB-Widget-body"><div class="CDB-Widget-header js-header"><h2 class="CDB-Text CDB-Size-large u-bSpace--xl">Level of engagement</h2><input type="range" min="1" max="' + data.rows[0].engagement + '" step="5" value="1" id="engagement"><div class="CDB-Range-info">1</div></div></div></div>').insertAfter(".CDB-Widget:last");
+                    bc.widgets["engagement"] = $("#engagement");
+                    bc.widgets["engagement"].on("change", function () {
+                        $(".CDB-Range-info").text($("#engagement")[0].value);
+                        updateLayers();
+                    });
+                });
 
             // Adm. regions locator
             bc.sql.execute("select cartodb_id as id, name as text from uk_administrative_regions")
