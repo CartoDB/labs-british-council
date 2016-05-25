@@ -170,27 +170,31 @@
             }
 
             bc.layers["uk_administrative_regions"].infowindow.set({template: $('#infowindow_template_uk_administrative_regions').html()});
-            bc.getInfowindowContentUKAdministrativeRegion = function (cartodb_id) {
+            bc.getInfowindowContentUKAdministrativeRegion = function (cartodb_id, region_name) {
                 if (cartodb_id) {
                     highlightFeature(cartodb_id, "uk_administrative_regions");
                     getUKAdministrativeRegionCounters(cartodb_id, function (counters) {
+                        $(".infowindow-uk-administrative-regions #region_name").text(region_name);
                         $(".infowindow-uk-administrative-regions #partner_count").text(counters.partner_count);
                         $(".infowindow-uk-administrative-regions #activity_count").text(counters.activity_count);
+                        $(".CDB-Loader").removeClass("is-visible");
                     });
                 }
             };
 
             bc.layers["westminster_constituencies"].infowindow.set({template: $('#infowindow_template_westminster_constituencies').html()});
-            bc.getInfowindowContentWestminsterConstituency = function (cartodb_id) {
+            bc.getInfowindowContentWestminsterConstituency = function (cartodb_id, constituency_name) {
                 if (cartodb_id) {
                     highlightFeature(cartodb_id, "westminster_constituencies");
                     getWestminsterConstituencyCounters(cartodb_id, function (counters) {
-                        $(".infowindow-westminster-constituencies #region").text(counters.region_name);
+                        $(".infowindow-westminster-constituencies #region_name").text(counters.region_name);
                         $(".infowindow-westminster-constituencies #region_partner_count").text(counters.region_partner_count);
                         $(".infowindow-westminster-constituencies #region_activity_count").text(counters.region_activity_count);
+                        $(".infowindow-westminster-constituencies #constituency_name").text(constituency_name);
                         $(".infowindow-westminster-constituencies #partners").text(counters.partners);
-                        $(".infowindow-westminster-constituencies #activity_programmes").text(counters.activity_programmes);
-                        $(".infowindow-westminster-constituencies #audience_country_codes").text(counters.audience_country_codes);
+                        $(".infowindow-westminster-constituencies #programmes").text(counters.programmes);
+                        $(".infowindow-westminster-constituencies #countries").text(counters.countries);
+                        $(".CDB-Loader").removeClass("is-visible");
                     });
                 }
             };

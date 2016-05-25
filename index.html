@@ -21,9 +21,10 @@
                     <div class="CDB-infowindow-bg">
                         <div class="CDB-infowindow-inner">
                             <ul class="CDB-infowindow-list js-content">
+                                <div class="CDB-Loader js-loader is-visible"></div>
                                 <li class="CDB-infowindow-listItem">
                                     <h5 class="CDB-infowindow-subtitle">Region name</h5>
-                                    <h4 class="CDB-infowindow-title"><%= arguments[0]["name"] %></h4>
+                                    <h4 class="CDB-infowindow-title" id="region_name"></h4>
                                 </li>
                                 <li class="CDB-infowindow-listItem">
                                     <h5 class="CDB-infowindow-subtitle">Num. of partners</h5>
@@ -33,7 +34,7 @@
                                     <h5 class="CDB-infowindow-subtitle">Num. of activities</h5>
                                     <h4 class="CDB-infowindow-title" id="activity_count"></h4>
                                 </li>
-                                <%= bc.getInfowindowContentUKAdministrativeRegion(arguments[0]["cartodb id"]) %>
+                                <%= bc.getInfowindowContentUKAdministrativeRegion(arguments[0]["cartodb id"], arguments[0]["name"]) %>
                             </ul>
                         </div>
                     </div>
@@ -50,9 +51,10 @@
                     <div class="CDB-infowindow-bg">
                         <div class="CDB-infowindow-inner">
                             <ul class="CDB-infowindow-list js-content">
+                                <div class="CDB-Loader js-loader is-visible"></div>
                                 <li class="CDB-infowindow-listItem">
                                     <h5 class="CDB-infowindow-subtitle">Region name</h5>
-                                    <h4 class="CDB-infowindow-title" id="region"></h4>
+                                    <h4 class="CDB-infowindow-title" id="region_name"></h4>
                                 </li>
                                 <li class="CDB-infowindow-listItem">
                                     <h5 class="CDB-infowindow-subtitle">Num. of partners</h5>
@@ -64,7 +66,7 @@
                                 </li>
                                 <li class="CDB-infowindow-listItem">
                                     <h5 class="CDB-infowindow-subtitle">Constituency name</h5>
-                                    <h4 class="CDB-infowindow-title"><%= arguments[0]["name"] %></h4>
+                                    <h4 class="CDB-infowindow-title" id="constituency_name"></h4>
                                 </li>
                                 <li class="CDB-infowindow-listItem">
                                     <h5 class="CDB-infowindow-subtitle">Partners</h5>
@@ -78,7 +80,7 @@
                                     <h5 class="CDB-infowindow-subtitle">Countries</h5>
                                     <h4 class="CDB-infowindow-title" id="countries"></h4>
                                 </li>
-                                <%= bc.getInfowindowContentWestminsterConstituency(arguments[0]["cartodb id"]) %>
+                                <%= bc.getInfowindowContentWestminsterConstituency(arguments[0]["cartodb id"], arguments[0]["name"]) %>
                             </ul>
                         </div>
                     </div>
