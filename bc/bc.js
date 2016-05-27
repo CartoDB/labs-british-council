@@ -145,7 +145,7 @@
                     var lonlat = data.rows[0];
 
                     bc.native_map.setView(lonlat, bc.native_map.getZoom());
-                    bc.layer_views[table].trigger('featureClick', null, [lonlat.lat, lonlat.lon], null, {cartodb_id: cartodb_id}, 1);
+                    bc.layer_views[table].trigger('featureClick', null, [lonlat.lat, lonlat.lon], null, {cartodb_id: cartodb_id}, table == "westminster_constituencies" ? 0 : 1);
                 });
         };
 

@@ -15,12 +15,12 @@ window.bc.viz = {
     ],
     "bounds": [
         [
-            53.29395162470101,
-            -3.1544494628906246
+            49.965356,
+            -12.282715
         ],
         [
-            53.69345406966439,
-            -1.525726318359375
+            59.601095,
+            2.812500
         ]
     ],
     "center": "[53.49417330661025, -2.340087890625]",
@@ -376,7 +376,7 @@ window.bc.viz = {
             "source": {
                 "id": "a0"
             },
-            "title": "Audience region",
+            "title": "Partner Country",
             "type": "category"
         },
         {
@@ -393,7 +393,7 @@ window.bc.viz = {
             "source": {
                 "id": "a0"
             },
-            "title": "Strategic Business Units",
+            "title": "Strategic Business Unit",
             "type": "category"
         },
         {
@@ -414,5 +414,5 @@ window.bc.viz = {
             "type": "category"
         }
     ],
-    "zoom": 10
+    "zoom": 7
 }

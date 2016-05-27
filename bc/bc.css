@@ -299,6 +299,11 @@ input[type=range]:focus::-ms-fill-upper {
     width: 200px;
 }
 
+.select2-results {
+    font-size: 12px;
+    font-family: 'Open Sans';
+}
+
 /* Layer selector */
 
 .Layer_selector {
