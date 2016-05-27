@@ -377,3 +377,21 @@ input[type=range]:focus::-ms-fill-upper {
     background: #FAFAFA;
     padding: 14px 0;
 }
+
+
+.CDB-infowindow-close {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  width: 24px;
+  height: 24px;
+  text-align: center;
+  background: #D2D5D7;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  cursor: pointer;
+  z-index: 10;
+}
